@@ -14,9 +14,10 @@ class EventRepository:
         cursor.close()
         return [EVENT(id=event['id'], time=event['time'], capacity=event['capacity'], price=event['price']) for event in events]
 
-    def make_event(self, time: str, capacity: int, price: float):
+    def make_event(self, time: int, capacity: int, price: float):
         cursor = self.connection.cursor(dictionary=True)
-        cursor.execute("INSERT INTO events (time, capacity, price) VALUES (%s, %s, %s)", (time, capacity, price))
+        event_time = f"{time:02d}:00:00"
+        cursor.execute("INSERT INTO events (time, capacity, price) VALUES (%s, %s, %s)", (event_time, capacity, price))
         self.connection.commit()
         
 
@@ -29,10 +30,10 @@ class EventRepository:
     def show_event_by_id(self, event_id: int):
         cursor = self.connection.cursor(dictionary=True)
         cursor.execute("SELECT * FROM events WHERE id = %s", (event_id,))
-        event = cursor.fetchone()
+        user = cursor.fetchone()
         cursor.close()
-        if event:
-            return EVENT(capacity=event['capacity'])
+        if user:
+            return EVENT(id=user['id'], time=user['time'], capacity=user['capacity'], price=user['price'])
         else:
             return None
 
