@@ -37,4 +37,27 @@ class EventRepository:
         else:
             return None
 
+    def sub_capacity(self, event_id:int,number_of_tickets):
+        cursor = self.connection.cursor(dictionary=True)
+        capacity = cursor.execute("select * from events where id = %s", (event_id,))
+        capacity = cursor.fetchone()
+
+        if capacity["capacity"] < number_of_tickets:
+            cursor.close()
+            return "Not enough capacity"
+        else:
+        
+            cursor.execute("UPDATE events SET capacity = capacity - %s WHERE id = %s", (number_of_tickets ,event_id))
+            self.connection.commit()
+            cursor.close()
+            return "Capacity updated"
+
+    def add_capacity(self,event_id):
+        cursor = self.connection.cursor(dictionary=True)
+
+        number_of_tickets = cursor.execute("select * from reserve where id = %s ", (event_id,)) 
+        number_of_tickets = cursor.fetchone()
+
+        cursor.execute("UPDATE events SET capacity = capacity + %s WHERE id = %s", (number_of_tickets["number_of_tickets"], event_id))
+        self.connection.commit()
 

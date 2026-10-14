@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class EventCreate(BaseModel):
-    event_time: int = Field(ge=0, le=24)
+    event_time: int = Field(ge=0, le=23)
     capacity: int = Field(gt=0)
     ticket_price: int = Field(ge=0)
 
