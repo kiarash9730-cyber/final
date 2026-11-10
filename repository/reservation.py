@@ -22,7 +22,7 @@ class ReservationRepository:
 
         cursor.close()
         key = f"reservation:{ticket_id}"
-        self.redis.set(key, "reserved", ex=10)
+        self.redis.set(key, "reserved", ex=120)
 
         return "success"
 

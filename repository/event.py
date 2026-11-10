@@ -58,6 +58,6 @@ class EventRepository:
         number_of_tickets = cursor.execute("select * from reserve where id = %s ", (event_id,)) 
         number_of_tickets = cursor.fetchone()
 
-        cursor.execute("UPDATE events SET capacity = capacity + %s WHERE id = %s", (number_of_tickets["number_of_tickets"], event_id))
+        cursor.execute("UPDATE events SET capacity = capacity + %s WHERE id = %s", (number_of_tickets["number_of_tickets"],number_of_tickets["ticket_id"]))
         self.connection.commit()
 
